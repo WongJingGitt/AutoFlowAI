@@ -8,5 +8,6 @@ if __name__ == '__main__':
     page.goto('https://www.bilibili.com/', timeout=0)
 
     screenshot = page.screenshot()
-    dom_list = DOMInspector(image=screenshot, yolo_model=path.join(ProjectPath.root_path, 'bilibili_best.pt'), dom_search=lambda item: item.get('name') == 'channel-link' and '鬼畜' in item.get('text'))
-    print(dom_list.get)
+    dom_inspector = DOMInspector(yolo_model=path.join(ProjectPath.root_path, 'bilibili_best.pt'))
+    dom_inspector(image=screenshot, dom_search=lambda item: item.get('name') == 'channel-link' and '鬼畜' in item.get('text'))
+    print(dom_inspector.get)

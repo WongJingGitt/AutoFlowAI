@@ -2,7 +2,6 @@ import playwright.sync_api
 from playwright.sync_api import sync_playwright, expect
 
 
-
 class BrowserLauncher:
     """
     基于playwright封装了启动类，可以快速启动指定的浏览器，并且获取浏览器对象与页面对象
@@ -225,6 +224,3 @@ class BrowserLauncher:
         new_page = self._browser.new_page()
         new_page.set_viewport_size(self.DEFAULT_VIEWPORT_SIZE)
         return new_page
-
-
-
