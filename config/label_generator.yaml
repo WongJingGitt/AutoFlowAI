@@ -1,0 +1,70 @@
+selectors:
+  - v-popover-wrap
+  - channel-link
+  - channel-items__right
+  - center-search-container
+  - bili-live-card is-rcmd
+  - bili-video-card is-rcmd
+  - video-info-container report-wrap-module report-scroll-module
+  - up-info-container
+  - up-info--left
+  - up-info--right
+  - default-btn old-charge-btn following-charge-btn
+  - default-btn new-charge-btn charge-btn-loaded
+  - default-btn follow-btn b-gz following
+  - default-btn follow-btn b-gz not-follow
+  - video-page-card-small
+  - root-reply-container
+  - sub-reply-container
+  - '#h-name'
+  - avatar-container
+pages:
+  - https://www.bilibili.com/
+  - https://www.bilibili.com/
+  - https://www.bilibili.com/
+  - https://www.bilibili.com/
+  - https://www.bilibili.com/video/BV1LF411o7Gj
+  - https://www.bilibili.com/video/BV1B4411w79q
+  - https://www.bilibili.com/video/BV1884y1f7Cp
+  - https://www.bilibili.com/video/BV1w44y1w7Z9
+  - https://www.bilibili.com/video/BV1Hx4y1X7Y9
+  - https://space.bilibili.com/3066511?spm_id_from=333.1007.tianma.2-2-5.click
+  - https://space.bilibili.com/67992790?spm_id_from=333.1007.0.0
+  - https://www.bilibili.com/
+  - https://space.bilibili.com/398510/?spm_id_from=333.999.0.0
+  - https://www.bilibili.com/video/BV1494y1e7Bf/?spm_id_from=333.999.0.0
+  - https://www.bilibili.com/video/BV1Eo4y177zz/?spm_id_from=333.999.0.0
+  - https://space.bilibili.com/67992790?spm_id_from=333.1007.0.0
+  - https://www.bilibili.com/video/BV1Uc411J7AJ/?spm_id_from=333.999.0.0
+  - https://www.bilibili.com/
+  - https://www.bilibili.com/video/BV1f8411E7np/?spm_id_from=333.999.0.0
+  - https://space.bilibili.com/19348133?spm_id_from=333.1007.tianma.1-3-3.click
+  - https://www.bilibili.com/
+  - https://www.bilibili.com/video/BV1Cv41187pd/?spm_id_from=333.788.recommend_more_video.2&vd_source=5b3322d0857ec7c0db481caf249e5595
+  - https://www.bilibili.com/video/BV1EK4y1v7eN/?spm_id_from=333.788.recommend_more_video.5&vd_source=5b3322d0857ec7c0db481caf249e5595
+  - https://www.bilibili.com/video/BV1ee411W7vx/?spm_id_from=333.788.recommend_more_video.6&vd_source=5b3322d0857ec7c0db481caf249e5595
+  - https://www.bilibili.com/video/BV1WQ4y1C7u1/?spm_id_from=333.788.recommend_more_video.7&vd_source=5b3322d0857ec7c0db481caf249e5595
+  - https://www.bilibili.com/video/BV1af4y1J7WB/?spm_id_from=333.788.recommend_more_video.7&vd_source=5b3322d0857ec7c0db481caf249e5595
+  - https://www.bilibili.com/video/BV1MA411E7ZK/?spm_id_from=333.788.recommend_more_video.6&vd_source=5b3322d0857ec7c0db481caf249e5595
+  - https://www.bilibili.com/video/BV1kt411A7rb/?spm_id_from=333.788.recommend_more_video.4&vd_source=5b3322d0857ec7c0db481caf249e5595
+  - https://www.bilibili.com/video/BV1dr4y1A7Yg/?spm_id_from=333.788.recommend_more_video.13&vd_source=5b3322d0857ec7c0db481caf249e5595
+  - https://www.bilibili.com/video/BV1U34y1a7ia/?spm_id_from=333.788.recommend_more_video.1&vd_source=5b3322d0857ec7c0db481caf249e5595
+  - https://www.bilibili.com/video/BV17Y411j7Ff/?spm_id_from=333.999.0.0&vd_source=5b3322d0857ec7c0db481caf249e5595
+  - https://www.bilibili.com/video/BV19K411G7NW/?spm_id_from=333.999.0.0
+  - https://space.bilibili.com/67992790?spm_id_from=333.1007.0.0
+  - https://www.bilibili.com/video/BV1EY411s7vx/?spm_id_from=333.999.0.0
+  - https://space.bilibili.com/19348133?spm_id_from=333.1007.tianma.1-3-3.click
+  - https://www.bilibili.com/video/BV144411T7Zv/?spm_id_from=333.999.0.0
+  - https://www.bilibili.com/
+  - https://www.bilibili.com/video/BV1Q4411L7bT/?spm_id_from=333.999.0.0
+  - https://www.bilibili.com/video/BV1db41157dA/?spm_id_from=333.999.0.0
+  - https://www.bilibili.com/video/BV1814y1977t/?spm_id_from=333.999.0.0
+  - https://www.bilibili.com/video/BV1fh4y1578w/?spm_id_from=333.999.0.0&vd_source=5b3322d0857ec7c0db481caf249e5595
+  - https://www.bilibili.com/video/BV1U94y1i7ip/?spm_id_from=333.999.0.0
+  - https://www.bilibili.com/video/BV1zW4y1f7dQ/?spm_id_from=333.999.0.0
+  - https://www.bilibili.com/
+  - https://www.bilibili.com/video/BV1eh4y1778d/?spm_id_from=333.999.0.0
+  - https://www.bilibili.com/video/BV1sX4y1L7BV/?spm_id_from=333.1007.tianma.1-1-1.click
+  - https://www.bilibili.com/video/BV1zX4y177bD/?spm_id_from=333.1007.tianma.4-3-13.click&vd_source=5b3322d0857ec7c0db481caf249e5595
+  - https://www.bilibili.com/video/BV1Sm4y1n7sN/?spm_id_from=333.1007.tianma.4-1-11.click
+  - https://www.bilibili.com/video/BV1mu4y1v7bi/?spm_id_from=333.1007.tianma.6-1-17.click

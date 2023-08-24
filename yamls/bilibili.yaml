@@ -1,0 +1,24 @@
+names:
+- v-popover-wrap
+- channel-link
+- channel-items__right
+- center-search-container
+- bili-live-card is-rcmd
+- bili-video-card is-rcmd
+- video-info-container report-wrap-module report-scroll-module
+- up-info-container
+- up-info--left
+- up-info--right
+- default-btn old-charge-btn following-charge-btn
+- default-btn new-charge-btn charge-btn-loaded
+- default-btn follow-btn b-gz following
+- default-btn follow-btn b-gz not-follow
+- video-page-card-small
+- root-reply-container
+- sub-reply-container
+- '#h-name'
+- avatar-container
+nc: 19
+path: E:\AutoFlowAI\datasets\bilibili
+train: images/train
+val: images/val
