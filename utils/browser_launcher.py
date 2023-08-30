@@ -2,7 +2,7 @@ import playwright.sync_api
 from playwright.sync_api import sync_playwright, expect
 
 
-class BrowserLauncher:
+class Browser:
     """
     基于playwright封装了启动类，可以快速启动指定的浏览器，并且获取浏览器对象与页面对象
     """
@@ -25,6 +25,8 @@ class BrowserLauncher:
             self._page, self._browser = self._launcher(browser_type or 'chrome', headless)
         else:
             self._page, self._browser = playwright_
+        self._browser.on('page', lambda page: page.set_viewport_size(self.DEFAULT_VIEWPORT_SIZE))
+        # TODO: 新窗口打开时视图分辨率没有生效，待优化
 
     def __del__(self):
         try:
@@ -34,7 +36,7 @@ class BrowserLauncher:
             pass
 
     def _launcher(self, browser_type: str or None = None, headless: bool = False) -> (
-            playwright.sync_api.Page, playwright.sync_api.Browser):
+            playwright.sync_api.Page, playwright.sync_api.BrowserContext):
         """
         浏览器启动的私有函数，在构造函数内被调用。
         :param browser_type: 需要启动的浏览器，可选 chromium、firefox、webkit，默认chrome
@@ -48,6 +50,7 @@ class BrowserLauncher:
         browser_type = browser_type if browser_type == 'chrome' else None
 
         _browser = getattr(self._playwright, browser_name).launch(headless=headless, channel=browser_type)
+        _browser = _browser.new_context()
         _page = _browser.new_page()
         _page.set_viewport_size(self.DEFAULT_VIEWPORT_SIZE)
         return _page, _browser
@@ -208,7 +211,7 @@ class BrowserLauncher:
         return self._page
 
     @property
-    def browser(self) -> playwright.sync_api.Browser:
+    def browser(self) -> playwright.sync_api.BrowserContext:
         """
         获取浏览器对象
         :return: 浏览器对象
@@ -224,3 +227,18 @@ class BrowserLauncher:
         new_page = self._browser.new_page()
         new_page.set_viewport_size(self.DEFAULT_VIEWPORT_SIZE)
         return new_page
+
+    @property
+    def pages(self) -> list[page]:
+        return self.browser.pages
+
+
+class BrowserLauncher:
+    _instance = None
+
+    def __new__(cls, browser_type: str = 'chrome', headless: bool = False, playwright_: tuple or bool = False,
+                **kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance = Browser(browser_type=browser_type, headless=headless, playwright_=playwright_)
+        return cls._instance
