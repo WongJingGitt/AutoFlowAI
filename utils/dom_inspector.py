@@ -6,6 +6,7 @@ from paddleocr import PaddleOCR
 from ultralytics import YOLO
 import json
 import cv2
+from utils.dom_result_handler import DOMResultHandler
 
 
 class DOMInspector:
@@ -27,7 +28,7 @@ class DOMInspector:
         """
         self._yolo_model = yolo_model
 
-    def __call__(self, image: bytes, lang: str = 'ch', dom_search: typing.Callable = None, **kwargs) -> list[dict]:
+    def __call__(self, image: bytes, lang: str = 'ch', dom_search: typing.Callable = None, **kwargs) -> DOMResultHandler:
         """
         在图像中检测DOM元素并执行OCR识别。
 
@@ -37,7 +38,7 @@ class DOMInspector:
             dom_search (Callable, optional): 用于筛选DOM元素的自定义搜索函数。默认为None。
 
         Returns:
-            list[dict]: 包含DOM元素信息的列表。
+            DOMResultHandler: DOMResultHandler实例化对象。
 
         Notes:
             - 输入图像应为字节数据。
@@ -51,6 +52,7 @@ class DOMInspector:
                 screenshot = page.screenshot()
                 dom_inspector = DOMInspector(yolo_model=path.join(ProjectPath.root_path, 'bilibili_best.pt'))
                 result = dom_inspector(image=screenshot, dom_search=lambda item: item.get('name') == 'channel-link' and '鬼畜' in item.get('text'))
+                result.click()
         """
         image_array = np.frombuffer(image, dtype=np.uint8)
         image_cv = cv2.imdecode(image_array, flags=cv2.IMREAD_COLOR)
@@ -86,4 +88,4 @@ class DOMInspector:
                     dom_list.append(result_with_text)
                 elif not dom_search:
                     dom_list.append(result_with_text)
-        return dom_list
+        return DOMResultHandler(dom_list)
