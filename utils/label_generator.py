@@ -42,6 +42,7 @@ class LabelGenerator:
                                           '%Y_%m_%d_%H_%M_%S'))
         self._image_path = path.join(self._parent_path, "images")
         self._label_path = path.join(self._parent_path, "labels")
+        if not path.exists(ProjectPath.datasets_path): os.mkdir(ProjectPath.datasets_path)
         if not path.exists(self._parent_path): os.mkdir(self._parent_path)
         if not path.exists(self._image_path): os.mkdir(self._image_path)
         if not path.exists(self._label_path): os.mkdir(self._label_path)
@@ -55,8 +56,15 @@ class LabelGenerator:
         with open(config_path, 'r', encoding='utf-8') as f:
             config_data: dict = yaml.safe_load(f)
             f.close()
-        self._selectors = config_data.get('selectors')
-        urls = config_data.get('pages')
+        self._selectors_list = config_data.get('selectors', None)
+        if not self._selectors_list: raise KeyError('label_generator.yaml 中没有找到selectors')
+        self._selectors = self._selectors_list if isinstance(self._selectors_list[0], str) else [item.get('class') for
+                                                                                                 item in
+                                                                                                 self._selectors_list]
+        self._names = self._selectors_list if isinstance(self._selectors_list[0], str) else [item.get('name') for item
+                                                                                             in self._selectors_list]
+        urls = config_data.get('pages', None)
+        if not urls: raise KeyError('label_generator.yaml 中没有找到pages')
 
         with open(path.join(self._parent_path, 'class.txt'), 'w', encoding='utf-8') as fw:
             fw.write('\n'.join(self._selectors))
@@ -110,7 +118,7 @@ class LabelGenerator:
                 "train": "images/train",
                 "val": "images/val",
                 "nc": len(self._selectors),
-                "names": self._selectors
+                "names": self._names
             }, yw)
             yw.close()
 
@@ -218,20 +226,18 @@ class LabelGenerator:
 
 
 if __name__ == '__main__':
-    with open(path.join(ProjectPath.config_path, 'bilibili_info.yaml'), 'r') as rf:
-        user_info = yaml.safe_load(rf)
+    # with open(path.join(ProjectPath.config_path, 'bilibili_info.yaml'), 'r') as rf:
+    #     user_info = yaml.safe_load(rf)
 
+    # def before(launcher: BrowserLauncher):
+    #     launcher.page.locator('.v-popover-wrap', has_text='登录').click()
+    #     launcher.page.wait_for_selector(selector="input[placeholder='请输入账号']", timeout=0)
+    #     launcher.type(selector=[
+    #         {"selector": "input[placeholder='请输入账号']", "selector_type": "css", "text": user_info.get('username')},
+    #         {"selector": "input[placeholder='请输入密码']", "selector_type": "css", "text": user_info.get('password')}
+    #     ], delay=0.5)
+    #     launcher.click('.btn_primary ', selector_type='css', has_text='登录')
+    #     launcher.page.wait_for_timeout(10000)
 
-    def before(launcher: BrowserLauncher):
-        launcher.page.locator('.v-popover-wrap', has_text='登录').click()
-        launcher.page.wait_for_selector(selector="input[placeholder='请输入账号']", timeout=0)
-        launcher.type(selector=[
-            {"selector": "input[placeholder='请输入账号']", "selector_type": "css", "text": user_info.get('username')},
-            {"selector": "input[placeholder='请输入密码']", "selector_type": "css", "text": user_info.get('password')}
-        ], delay=0.5)
-        launcher.click('.btn_primary ', selector_type='css', has_text='登录')
-        launcher.page.wait_for_timeout(10000)
-
-
-    lg = LabelGenerator('https://www.bilibili.com/', before_start=before,
+    lg = LabelGenerator('https://www.bilibili.com/',
                         sources_dir_name='bilibili')
