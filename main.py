@@ -1,4 +1,3 @@
-import datetime
 import time
 from os import path
 from utils import BrowserLauncher, DOMInspector, ProjectPath
@@ -13,8 +12,9 @@ if __name__ == '__main__':
     screenshot = page.screenshot()
 
     dom_inspector = DOMInspector(yolo_model=path.join(ProjectPath.root_path, 'bilibili_best.pt'))
-    start_time = datetime.datetime.now()
     result = dom_inspector(image=screenshot)
-    handler = DOMResultHandler(result)
-    handler.click(lambda item: item.get('name') == 'channel-link' and '鬼畜' in item.get('text'))
+    # handler.click(lambda item: item.get('name') == 'channel-link' and '鬼畜' in item.get('text'))
+    result.filter(lambda item: item.get('name') == 'center-search-container').input('UI自动化')
+    page.keyboard.press('Enter')
+    time.sleep(1)
     time.sleep(15)
