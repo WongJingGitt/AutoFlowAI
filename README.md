@@ -37,6 +37,7 @@ pip install -r requirements.txt
 ```  
 
 <h3 id="quickstart-step4">步骤4：填写数据收集配置文件</h3>  
+
 在此步骤中，你需要编辑 `config/label_generator.yaml` 文件（以下简称：配置文件），以配置数据收集的相关设置。 
   
 配置文件最外层包含两个关键字：  
