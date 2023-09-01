@@ -199,3 +199,48 @@ LabelGenerator(
   ```
 
 可以根据你的项目和需求，调整命令中的路径和参数。  
+
+<h3 id="quickstart-step7">步骤7：投入使用</h3>  
+
+项目在`DOMInspector`类中整合了YOLO与OCR。在实际使用时，通过使用 `BrowserLauncher` 类访问页面并且截图传入`DOMInspector`进行页面DOM组件识别与操作，以下是一段示例代码：  
+
+
+```python
+import time
+from os import path
+from utils import BrowserLauncher, DOMInspector, ProjectPath
+
+if __name__ == '__main__':
+    # 初始化浏览器
+    browser_launcher = BrowserLauncher(headless=False)
+    browser = browser_launcher.browser
+    page = browser_launcher.page
+  
+    # 打开初始页面
+    page.goto('https://www.bilibili.com/', timeout=0)
+  
+    # 截取页面截图
+    screenshot = page.screenshot()
+  
+    # 初始化DOM检查器
+    dom_inspector = DOMInspector(yolo_model=path.join(ProjectPath.root_path, 'bilibili_best.pt'))
+  
+    # 使用DOM检查器识别页面元素
+    result = dom_inspector(image=screenshot)
+      
+    # 点击元素
+    result.click(lambda item: item.get('name') == 'channel-link' and '鬼畜' in item.get('text'))
+    
+    # 输入元素
+    result.filter(lambda item: item.get('name') == 'center-search-container').input('UI自动化')
+    
+    page.keyboard.press('Enter')
+    time.sleep(1)
+    time.sleep(15)
+```
+
+> **注意：** `BrowserLauncher` 是一个基于 `Playwright` 封装的浏览器启动类，具体的API可以查阅[官方文档](https://playwright.dev/python/docs/api/class-playwright)  
+> 
+> 对于 `Selenium` 的支持，可能会在后期安排。
+> 
+> 当前的项目还存在一些限制，例如必须结合 `BrowserLauncher` 编写测试用例，对于一些已有的项目支持度可能不太友好，后期也会考虑继续优化。
