@@ -239,8 +239,10 @@ if __name__ == '__main__':
     time.sleep(15)
 ```
 
+
 > **注意：** `BrowserLauncher` 是一个基于 `Playwright` 封装的浏览器启动类，具体的API可以查阅[官方文档](https://playwright.dev/python/docs/api/class-playwright)  
+>
 > 
 > 对于 `Selenium` 的支持，可能会在后期安排。
 > 
-> 当前的项目还存在一些限制，例如必须结合 `BrowserLauncher` 编写测试用例，对于一些已有的项目支持度可能不太友好，后期也会考虑继续优化。
+> 当前的项目还存在一些限制，`BrowserLauncher` 在封装时使用了单例模式，因此 `DOMInspector`返回的`DOMResultHandler` 实例化对象是依赖于 `BrowserLauncher`来进行操作浏览器的。所以必须结合 `BrowserLauncher` 编写测试用例 `DOMInspector` 才能读取到浏览器的上下文，对于一些已有的项目支持度可能不太友好，后期也会考虑继续优化。
