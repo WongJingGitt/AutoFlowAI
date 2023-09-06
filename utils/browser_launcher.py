@@ -1,3 +1,5 @@
+import time
+
 import playwright.sync_api
 from playwright.sync_api import sync_playwright, expect
 
@@ -14,19 +16,15 @@ class Browser:
     }
     DEFAULT_VIEWPORT_SIZE = {'width': 1920, 'height': 1080}
 
-    def __init__(self, browser_type: str = 'chrome', headless: bool = False, playwright_: tuple or bool = False):
+    def __init__(self, browser_type: str = 'chrome', headless: bool = False):
         """
         构造函数
         :param browser_type: 需要启动的浏览器，可选 chromium、firefox、webkit，默认chrome
         :param headless: 是否以无头模式启动，默认False
         """
-        if not playwright_:
-            self._playwright = sync_playwright().start()
-            self._page, self._browser = self._launcher(browser_type or 'chrome', headless)
-        else:
-            self._page, self._browser = playwright_
+        self._playwright = sync_playwright().start()
+        self._page, self._browser = self._launcher(browser_type or 'chrome', headless)
         self._browser.on('page', lambda page: page.set_viewport_size(self.DEFAULT_VIEWPORT_SIZE))
-        # TODO: 新窗口打开时视图分辨率没有生效，待优化
 
     def __del__(self):
         try:
@@ -65,13 +63,10 @@ class Browser:
         :param (str) has_text: 可选。目标元素包含的文本，用于辅助捕获元素。默认None
         :return: Locator
 
-        例：
-
-        ```python
+        Example:
             input_elem = browser_launcher.get_element(selector='sb_form_q', selector_type='id')
             input_elem = browser_launcher.get_element(selector='#sb_form_q', selector_type='css')
             input_elem = browser_launcher.get_element(selector='button[class="tea-btn tea-btn--weak"]', selector_type='css', has_text='Revenue')
-        ```
         """
         element_page = self.page if element_page is None else element_page
         if selector_type:
@@ -99,9 +94,8 @@ class Browser:
         :param (Page) element_page: 可选。需要输入的页面，默认首次打开的页面。
         :return: self，实现链式调用
 
-        例：
-        ```python
-                input_elem = browser_launcher.get_element(selector='sb_form_q', selector_type='id')
+        Example:
+            input_elem = browser_launcher.get_element(selector='sb_form_q', selector_type='id')
 
                 elements = [
                     {"selector": 'sb_form_q', "selector_type": 'id', 'text': '全量参数测试、'},
@@ -116,7 +110,6 @@ class Browser:
 
                 browser_launcher.page_assert(input_elem).to_have_value(
                     '全量参数测试、带了text、这是默认的text、这是元素对象输入测试、这是单独输入测试')
-        ```
 
         """
         element_page = self._page if not element_page else element_page
@@ -154,9 +147,8 @@ class Browser:
         :param (str) has_text: 可选。点击元素包含的文本，用于辅助捕获元素，list字典内支持单独传入作为单次点击的参数
         :return: self，用做链式调用。
 
-        例：
-
-        ```python
+        Example:
+            python
             browser_launcher.click(
                 selector=[
                     {'selector': 'button[class="tea-btn tea-btn--weak"]', 'has_text': 'Revenue', 'selector_type': 'css'},
@@ -166,7 +158,6 @@ class Browser:
                 ],
                 delay=2
             )
-        ```
         """
         element_page = self._page if not element_page else element_page
         if isinstance(selector, str):
@@ -236,9 +227,13 @@ class Browser:
 class BrowserLauncher:
     _instance = None
 
-    def __new__(cls, browser_type: str = 'chrome', headless: bool = False, playwright_: tuple or bool = False,
+    def __new__(cls,
+                browser_type: str = 'chrome',
+                headless: bool = False,
                 **kwargs):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-            cls._instance = Browser(browser_type=browser_type, headless=headless, playwright_=playwright_)
+        if cls._instance: return cls._instance
+        cls._instance = super().__new__(cls)
+        cls._instance = Browser(browser_type=browser_type, headless=headless)
         return cls._instance
+
+
