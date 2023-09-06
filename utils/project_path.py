@@ -8,6 +8,7 @@ class ProjectPath:
     dataset_backup_path = path.join(root_path, 'dataset_backup')
     config_path = path.join(root_path, 'config')
     yamls_path = path.join(root_path, 'yamls')
+    public_path = path.join(root_path, 'public')
 
 
 if __name__ == '__main__':
