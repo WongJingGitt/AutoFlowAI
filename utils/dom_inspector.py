@@ -1,3 +1,4 @@
+import math
 import typing
 import numpy as np
 from PIL import Image
@@ -7,6 +8,9 @@ from ultralytics import YOLO
 import json
 import cv2
 from utils.dom_result_handler import DOMResultHandler
+from multiprocessing import Pool
+from contextlib import contextmanager
+import os
 
 
 class DOMInspector:
@@ -19,6 +23,10 @@ class DOMInspector:
     Attributes:
         _yolo_model (str): YOLO模型的路径。
     """
+
+    DEFAULT_NUM_PROCESSES = math.floor(os.cpu_count() / 2)
+    DEFAULT_LANG = 'ch'
+
     def __init__(self, yolo_model: str):
         """
         初始化DOMInspector类。
@@ -63,29 +71,38 @@ class DOMInspector:
         result = self._model(image_object)
 
         image_object.close()
-
-        ocr = PaddleOCR(use_angle_cls=True, lang=lang)
-
         dom_list = []
         for index, item in enumerate(result):
             item = json.loads(item.tojson())
             if len(item) <= 0:
                 continue
-            for dom_detail in item:
-                box: dict = dom_detail.get('box')
-                name = dom_detail.get('name')
-                _class = dom_detail.get('class')
-                confidence = dom_detail.get('confidence')
-                cropped_image = image_cv[int(box.get('y1')): int(box.get('y2')), int(box.get('x1')): int(box.get('x2'))]
-                cropped_arr = np.array(cropped_image)
+            d = [(item, image_cv, dom_search, lang) for item in item]
 
-                text_result = ocr.ocr(cropped_arr, cls=True)
-                text_result = text_result[0]
-                text_result = [item[1][0] for item in text_result]
-                result_with_text = {"box": box, "name": name, "class": _class, "confidence": confidence,
-                                    "text": text_result}
-                if isinstance(dom_search, typing.Callable) and dom_search(result_with_text):
-                    dom_list.append(result_with_text)
-                elif not dom_search:
-                    dom_list.append(result_with_text)
+            with self._create_pool() as pool:
+                dom_list = pool.map(self._whit_ocr, d)
+
         return DOMResultHandler(dom_list)
+
+    @contextmanager
+    def _create_pool(self, num_processes=DEFAULT_NUM_PROCESSES):
+        with Pool(processes=num_processes) as pool:
+            yield pool
+
+    def _whit_ocr(self, d):
+        dom_detail, image_cv, dom_search, lang = d
+        ocr = PaddleOCR(use_angle_cls=True, lang=lang, show_log=False)
+        box: dict = dom_detail.get('box')
+        name = dom_detail.get('name')
+        _class = dom_detail.get('class')
+        confidence = dom_detail.get('confidence')
+        cropped_image = image_cv[int(box.get('y1')): int(box.get('y2')), int(box.get('x1')): int(box.get('x2'))]
+        cropped_arr = np.array(cropped_image)
+        text_result = ocr.ocr(cropped_arr, cls=True)
+        text_result = text_result[0]
+        text_result = [item[1][0] for item in text_result]
+        result_with_text = {"box": box, "name": name, "class": _class, "confidence": confidence,
+                            "text": text_result}
+        if isinstance(dom_search, typing.Callable) and dom_search(result_with_text):
+            return result_with_text
+        elif not dom_search:
+            return result_with_text
