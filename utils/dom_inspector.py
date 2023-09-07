@@ -36,8 +36,13 @@ class DOMInspector:
         """
         self._yolo_model = yolo_model
 
-    def __call__(self, image: bytes, lang: str = 'ch', dom_search: typing.Callable = None,
-                 **kwargs) -> DOMResultHandler:
+    def __call__(self,
+                 image: bytes,
+                 lang: str = 'ch',
+                 dom_search: typing.Callable = None,
+                 use_ocr: bool = True,
+                 **kwargs
+                 ) -> DOMResultHandler:
         """
         在图像中检测DOM元素并执行OCR识别。
 
@@ -77,9 +82,13 @@ class DOMInspector:
             item = json.loads(item.tojson())
             if len(item) <= 0:
                 continue
-            d = [(item, image_cv, dom_search, lang) for item in item]
-            with self._create_pool() as pool:
-                dom_list = list(pool.imap_unordered(self._with_ocr, d))
+
+            if use_ocr:
+                d = [(item, image_cv, dom_search, lang) for item in item]
+                with self._create_pool() as pool:
+                    dom_list += list(pool.imap_unordered(self._with_ocr, d))
+            else:
+                dom_list += item
         return DOMResultHandler(dom_list)
 
     @contextmanager
@@ -89,13 +98,13 @@ class DOMInspector:
 
     def _with_ocr(self, d):
         dom_detail, image_cv, dom_search, lang = d
-        ocr = PaddleOCR(use_angle_cls=True, lang=lang, show_log=False)
         box: dict = dom_detail.get('box')
         name = dom_detail.get('name')
         _class = dom_detail.get('class')
         confidence = dom_detail.get('confidence')
         cropped_image = image_cv[int(box.get('y1')): int(box.get('y2')), int(box.get('x1')): int(box.get('x2'))]
         cropped_arr = np.array(cropped_image)
+        ocr = PaddleOCR(use_angle_cls=True, lang=lang, show_log=False)
         text_result = ocr.ocr(cropped_arr, cls=False)
         text_result = text_result[0]
         text_result = [item[1][0] for item in text_result]
