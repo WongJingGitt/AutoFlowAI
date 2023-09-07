@@ -75,7 +75,6 @@ class DOMInspector:
         self._model = YOLO(self._yolo_model)
 
         result = self._model(image_object)
-
         image_object.close()
         dom_list = []
         for index, item in enumerate(result):
