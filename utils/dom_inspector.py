@@ -36,7 +36,8 @@ class DOMInspector:
         """
         self._yolo_model = yolo_model
 
-    def __call__(self, image: bytes, lang: str = 'ch', dom_search: typing.Callable = None, **kwargs) -> DOMResultHandler:
+    def __call__(self, image: bytes, lang: str = 'ch', dom_search: typing.Callable = None,
+                 **kwargs) -> DOMResultHandler:
         """
         在图像中检测DOM元素并执行OCR识别。
 
@@ -77,14 +78,12 @@ class DOMInspector:
             if len(item) <= 0:
                 continue
             d = [(item, image_cv, dom_search, lang) for item in item]
-
             with self._create_pool() as pool:
-                dom_list = pool.map(self._whit_ocr, d)
-
+                dom_list = list(pool.imap_unordered(self._whit_ocr, d))
         return DOMResultHandler(dom_list)
 
     @contextmanager
-    def _create_pool(self, num_processes=DEFAULT_NUM_PROCESSES):
+    def _create_pool(self, num_processes=DEFAULT_NUM_PROCESSES) -> Pool:
         with Pool(processes=num_processes) as pool:
             yield pool
 
@@ -97,7 +96,7 @@ class DOMInspector:
         confidence = dom_detail.get('confidence')
         cropped_image = image_cv[int(box.get('y1')): int(box.get('y2')), int(box.get('x1')): int(box.get('x2'))]
         cropped_arr = np.array(cropped_image)
-        text_result = ocr.ocr(cropped_arr, cls=True)
+        text_result = ocr.ocr(cropped_arr, cls=False)
         text_result = text_result[0]
         text_result = [item[1][0] for item in text_result]
         result_with_text = {"box": box, "name": name, "class": _class, "confidence": confidence,
