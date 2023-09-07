@@ -79,7 +79,7 @@ class DOMInspector:
                 continue
             d = [(item, image_cv, dom_search, lang) for item in item]
             with self._create_pool() as pool:
-                dom_list = list(pool.imap_unordered(self._whit_ocr, d))
+                dom_list = list(pool.imap_unordered(self._with_ocr, d))
         return DOMResultHandler(dom_list)
 
     @contextmanager
@@ -87,7 +87,7 @@ class DOMInspector:
         with Pool(processes=num_processes) as pool:
             yield pool
 
-    def _whit_ocr(self, d):
+    def _with_ocr(self, d):
         dom_detail, image_cv, dom_search, lang = d
         ocr = PaddleOCR(use_angle_cls=True, lang=lang, show_log=False)
         box: dict = dom_detail.get('box')
