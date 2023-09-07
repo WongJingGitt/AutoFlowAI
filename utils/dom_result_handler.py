@@ -1,6 +1,7 @@
 import typing
 import playwright.sync_api
 from utils import BrowserLauncher
+import logging
 
 
 class DOMResultHandler:
@@ -36,6 +37,7 @@ class DOMResultHandler:
         Args:
             result_list (list[dict]): 一系列DOM元素详细信息，每个元素都用字典表示。
         """
+        self._logging = logging.getLogger('Handler')
         self._result_list = result_list
         self._browser_launcher = BrowserLauncher()
 
@@ -49,10 +51,13 @@ class DOMResultHandler:
         returns:
             tuple[float, float] or None: DOM元素的中心坐标 (x, y)，如果找不到则返回None。
         """
-        dom_detail: dict = self._result_list[0] if not callback else \
-            [item for item in self._result_list if callback(item)][0]
+        dom_detail: list[dict] = self._result_list if not callback else \
+            [item for item in self._result_list if callback(item)]
         if len(dom_detail) < 1:
+            self._logging.setLevel(logging.INFO)
+            self._logging.info('没有捕获得到元素！')
             return None, None
+        dom_detail: dict = dom_detail[0]
         box: dict = dom_detail.get('box')
         x1, y1, x2, y2 = box.values()
         x = (x2 - x1) / 2 + x1
@@ -95,18 +100,21 @@ class DOMResultHandler:
             None
         """
         x, y = self._get_position(callback=callback)
+        if not x or not y:
+            return None
         page: playwright.sync_api.Page = self._browser_launcher.pages[page_index]
         if not double:
             page.mouse.click(x=x, y=y)
         elif double:
             page.mouse.dblclick(x=x, y=y)
 
-    def input(self, text: str, callback: typing.Callable = None, page_index: int = 0):
+    def input(self, text: str, clear: bool = True, callback: typing.Callable = None, page_index: int = 0):
         """
         模拟在DOM输入元素中输入文本。
 
         Args:
             text (str): 需要输入的文本。
+            clear (bool): 是否需要在输入之前清空文本框，默认Ture 清除。
             callback (Callable): 用于筛选DOM元素的回调函数。
             page_index (int): 执行输入操作的页面索引。
 
@@ -114,8 +122,13 @@ class DOMResultHandler:
             None
         """
         x, y = self._get_position(callback=callback)
+        if not x or not y:
+            return None
         page: playwright.sync_api.Page = self._browser_launcher.pages[page_index]
         page.mouse.click(x=x, y=y)
+        if clear:
+            page.keyboard.press('Control+A')
+            page.keyboard.press('Backspace')
         page.keyboard.insert_text(text=text)
 
     def scroll(self, callback: typing.Callable = None, page_index: int = 0, scroll_x: float = 100.00,
