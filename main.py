@@ -3,7 +3,7 @@ from os import path
 from utils import BrowserLauncher, DOMInspector, ProjectPath
 
 if __name__ == '__main__':
-    browser_launcher = BrowserLauncher(headless=False)
+    browser_launcher = BrowserLauncher(headless=True)
     browser = browser_launcher.browser
     page = browser_launcher.page
     page.goto('https://www.bilibili.com/', timeout=0)
