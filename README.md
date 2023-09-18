@@ -28,6 +28,14 @@ Auto Flow AI是一个创新性的UI自动化框架，将计算机视觉技术与
 git clone https://gitee.com/wangyingjie1003/auto-flow-ai.git
 cd auto-flow-ai
 ```
+
+使用以下命令从Github克隆项目：
+
+```commandline
+git clone https://github.com/WongJingGitt/AutoFlowAI.git
+cd auto-flow-ai
+```
+
   
 <h3 id="quickstart-step3">步骤3：安装项目依赖</h3>  
 运行以下命令安装项目所需的依赖：  
