@@ -80,7 +80,7 @@ class DOMInspector:
         dom_list = []
         for index, item in enumerate(result):
             item = json.loads(item.tojson())
-            if len(item) <= 0:
+            if not item:
                 continue
             if use_ocr:
                 d = [(item, image_cv, dom_search, lang) for item in item]

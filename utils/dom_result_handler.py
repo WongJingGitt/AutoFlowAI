@@ -55,7 +55,7 @@ class DOMResultHandler:
         """
         dom_detail: list[dict] = self._result_list if not callback else \
             [item for item in self._result_list if callback(item)]
-        if len(dom_detail) < 1:
+        if not dom_detail:
             self._logging.setLevel(logging.INFO)
             self._logging.info('没有捕获得到元素！')
             return None, None
