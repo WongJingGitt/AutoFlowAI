@@ -18,6 +18,8 @@ Auto Flow AI是一个创新性的UI自动化框架，将计算机视觉技术与
 确保你的系统已安装以下依赖： 
   
 - Python 3.10.5+  
+- CUDA  
+- CUDNN  
   
 > **注意：** 项目的编写与测试均在Python版本`3.10.5`下进行，在低于`3.10.5`的Python版本上可能存在兼容性问题。建议在`3.10.5`或更高版本的Python中使用。  
 
@@ -35,6 +37,9 @@ cd auto-flow-ai
 ```commandline
 pip install -r requirements.txt
 ```  
+
+> **注意：** OCR库的安装请查阅[PP飞桨](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.7/doc/doc_ch/quickstart.md#11)官方库。  
+> 如果提示`PyMuPDF`安装失败，参考这个[Issues](https://github.com/PaddlePaddle/PaddleOCR/issues/10669)
 
 <h3 id="quickstart-step4">步骤4：填写数据收集配置文件</h3>  
 
