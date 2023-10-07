@@ -30,7 +30,7 @@ class DOMResultHandler:
         dom_handler.scroll(callback=lambda item: 'scroll' in item.get('name'))
     """
 
-    def __init__(self, result_list):
+    def __init__(self, result_list, page_index: int = 0):
         """
         初始化DOMResultHandler，传入一系列DOM元素详细信息。
 
@@ -40,6 +40,8 @@ class DOMResultHandler:
         self._logging = logging.getLogger('Handler')
         self._result_list = result_list
         self._browser_launcher = BrowserLauncher()
+        self._page = self._browser_launcher.pages[page_index]
+        self._page_index = page_index
 
     def _get_position(self, callback: typing.Callable = None) -> tuple[float, float] or None:
         """
@@ -53,7 +55,7 @@ class DOMResultHandler:
         """
         dom_detail: list[dict] = self._result_list if not callback else \
             [item for item in self._result_list if callback(item)]
-        if len(dom_detail) < 1:
+        if not dom_detail:
             self._logging.setLevel(logging.INFO)
             self._logging.info('没有捕获得到元素！')
             return None, None
@@ -75,7 +77,7 @@ class DOMResultHandler:
              DOMResultHandler: 包含筛选元素的新DOMResultHandler实例。
          """
         result = [item for item in self._result_list if callback(item)]
-        return DOMResultHandler(result)
+        return DOMResultHandler(result, page_index=self._page_index)
 
     @property
     def get_texts(self):
@@ -87,7 +89,7 @@ class DOMResultHandler:
         """
         return [item.get('text') for item in self._result_list]
 
-    def click(self, callback: typing.Callable = None, page_index: int = 0, double: bool = False):
+    def click(self, callback: typing.Callable = None, page_index: int = None, double: bool = False):
         """
         点击DOM元素。
 
@@ -102,13 +104,14 @@ class DOMResultHandler:
         x, y = self._get_position(callback=callback)
         if not x or not y:
             return None
+        page_index = self._page_index if not page_index else page_index
         page: playwright.sync_api.Page = self._browser_launcher.pages[page_index]
         if not double:
             page.mouse.click(x=x, y=y)
         elif double:
             page.mouse.dblclick(x=x, y=y)
 
-    def input(self, text: str, clear: bool = True, callback: typing.Callable = None, page_index: int = 0):
+    def input(self, text: str, clear: bool = True, callback: typing.Callable = None, page_index: int = None):
         """
         模拟在DOM输入元素中输入文本。
 
@@ -124,6 +127,7 @@ class DOMResultHandler:
         x, y = self._get_position(callback=callback)
         if not x or not y:
             return None
+        page_index = self._page_index if not page_index else page_index
         page: playwright.sync_api.Page = self._browser_launcher.pages[page_index]
         page.mouse.click(x=x, y=y)
         if clear:
@@ -131,7 +135,7 @@ class DOMResultHandler:
             page.keyboard.press('Backspace')
         page.keyboard.insert_text(text=text)
 
-    def scroll(self, callback: typing.Callable = None, page_index: int = 0, scroll_x: float = 100.00,
+    def scroll(self, callback: typing.Callable = None, page_index: int = None, scroll_x: float = 100.00,
                scroll_y: float = 100.00):
         """
         模拟在DOM元素上滚动。
@@ -146,6 +150,7 @@ class DOMResultHandler:
             None
         """
         x, y = self._get_position(callback=callback)
+        page_index = self._page_index if not page_index else page_index
         page: playwright.sync_api.Page = self._browser_launcher.pages[page_index]
         page.mouse.move(x, y)
         page.wait_for_timeout(500)

@@ -41,6 +41,7 @@ class DOMInspector:
                  lang: str = 'ch',
                  dom_search: typing.Callable = None,
                  use_ocr: bool = True,
+                 page_index: int = 0,
                  **kwargs
                  ) -> DOMResultHandler:
         """
@@ -79,7 +80,7 @@ class DOMInspector:
         dom_list = []
         for index, item in enumerate(result):
             item = json.loads(item.tojson())
-            if len(item) <= 0:
+            if not item:
                 continue
             if use_ocr:
                 d = [(item, image_cv, dom_search, lang) for item in item]
@@ -87,7 +88,7 @@ class DOMInspector:
                     dom_list += list(pool.imap_unordered(self._with_ocr, d))
             else:
                 dom_list += item
-        return DOMResultHandler(dom_list)
+        return DOMResultHandler(dom_list, page_index=page_index)
 
     @contextmanager
     def _create_pool(self, num_processes=DEFAULT_NUM_PROCESSES) -> Pool:

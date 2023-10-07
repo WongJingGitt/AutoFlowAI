@@ -1,5 +1,3 @@
-import time
-
 import playwright.sync_api
 from playwright.sync_api import sync_playwright, expect
 
@@ -220,7 +218,7 @@ class Browser:
         return new_page
 
     @property
-    def pages(self) -> list[page]:
+    def pages(self) -> playwright.sync_api.BrowserContext.pages:
         return self.browser.pages
 
 

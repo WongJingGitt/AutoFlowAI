@@ -3,7 +3,7 @@ from os import path
 from utils import BrowserLauncher, DOMInspector, ProjectPath
 
 if __name__ == '__main__':
-    browser_launcher = BrowserLauncher(headless=True)
+    browser_launcher = BrowserLauncher(headless=False)
     browser = browser_launcher.browser
     page = browser_launcher.page
     page.goto('https://www.bilibili.com/', timeout=0)
@@ -20,5 +20,18 @@ if __name__ == '__main__':
     result.filter(lambda item: item.get('name') == 'center-search-container').input('UI自动化')
 
     page.keyboard.press('Enter')
+
+    page.wait_for_timeout(500)
+
+    new_page = browser_launcher.pages[-1]
+
+    new_screenshot = new_page.screenshot()
+    new_result = dom_inspector(image=new_screenshot, use_ocr=False, page_index=-1)
+
+    new_result.filter(lambda item: item.get('name') == 'center-search-container').input('接口自动化')
+
+    new_page.keyboard.press('Enter')
+
     time.sleep(1)
     time.sleep(15)
+
