@@ -85,7 +85,6 @@ class LabelGenerator:
             while True:
                 data_name = f"{datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}__{int(random.random() * 10000000)}"
                 yolo_datas = [f'{index} {self._element_position_for_yolo(selector)}' for index, selector in visible]
-                print(visible, hidden)
                 # 爬B站首页时出现空yolo_datas陷入死循环的情况，优化这类场景
                 if not yolo_datas:
                     print(url, '搜寻完毕')
@@ -155,7 +154,7 @@ class LabelGenerator:
                 selector_str = self._convert_selector(selector_str)
                 selectors = self.__page.query_selector_all(selector_str)
                 # 优化处理，确保selectors是可迭代对象
-                selectors = selectors if not selectors else []
+                selectors = [] if not selectors else selectors
             else:
                 # 优化处理，当不是初次调用时传入的格式时 (label索引, 元素对象)。如果不用数组包裹后续遍历会遍历元组导致_, selector = result分解失败
                 selectors = [selector_str]
@@ -229,15 +228,17 @@ if __name__ == '__main__':
     # with open(path.join(ProjectPath.config_path, 'bilibili_info.yaml'), 'r') as rf:
     #     user_info = yaml.safe_load(rf)
 
-    # def before(launcher: BrowserLauncher):
-    #     launcher.page.locator('.v-popover-wrap', has_text='登录').click()
-    #     launcher.page.wait_for_selector(selector="input[placeholder='请输入账号']", timeout=0)
-    #     launcher.type(selector=[
-    #         {"selector": "input[placeholder='请输入账号']", "selector_type": "css", "text": user_info.get('username')},
-    #         {"selector": "input[placeholder='请输入密码']", "selector_type": "css", "text": user_info.get('password')}
-    #     ], delay=0.5)
-    #     launcher.click('.btn_primary ', selector_type='css', has_text='登录')
-    #     launcher.page.wait_for_timeout(10000)
+    def before(launcher: BrowserLauncher):
+        # launcher.page.locator('.v-popover-wrap', has_text='登录').click()
+        # launcher.page.wait_for_selector(selector="input[placeholder='请输入账号']", timeout=0)
+        # launcher.type(selector=[
+        #     {"selector": "input[placeholder='请输入账号']", "selector_type": "css", "text": user_info.get('username')},
+        #     {"selector": "input[placeholder='请输入密码']", "selector_type": "css", "text": user_info.get('password')}
+        # ], delay=0.5)
+        # launcher.click('.btn_primary ', selector_type='css', has_text='登录')
+        launcher.page.wait_for_timeout(60000)
 
     lg = LabelGenerator('https://www.bilibili.com/',
-                        sources_dir_name='bilibili')
+                        sources_dir_name='bilibili',
+                        before_start=before
+                        )

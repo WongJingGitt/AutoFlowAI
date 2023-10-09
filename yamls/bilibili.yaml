@@ -3,6 +3,7 @@ names:
 - channel-link
 - channel-items__right
 - center-search-container
+- search-input-wrap flex_between
 - bili-live-card is-rcmd
 - bili-video-card is-rcmd
 - video-info-container report-wrap-module report-scroll-module
@@ -18,7 +19,7 @@ names:
 - sub-reply-container
 - '#h-name'
 - avatar-container
-nc: 19
+nc: 20
 path: E:\AutoFlowAI\datasets\bilibili
 train: images/train
 val: images/val
