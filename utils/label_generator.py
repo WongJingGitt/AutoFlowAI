@@ -155,7 +155,7 @@ class LabelGenerator:
                 selector_str = self._convert_selector(selector_str)
                 selectors = self.__page.query_selector_all(selector_str)
                 # 优化处理，确保selectors是可迭代对象
-                selectors = selectors if not selectors else []
+                selectors = [] if not selectors else selectors
             else:
                 # 优化处理，当不是初次调用时传入的格式时 (label索引, 元素对象)。如果不用数组包裹后续遍历会遍历元组导致_, selector = result分解失败
                 selectors = [selector_str]
