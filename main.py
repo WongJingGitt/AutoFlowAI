@@ -6,12 +6,11 @@ if __name__ == '__main__':
     browser_launcher = BrowserLauncher(headless=False)
     browser = browser_launcher.browser
     page = browser_launcher.page
-    page.goto('https://www.bilibili.com/', timeout=0)
+    page.goto('https://search.bilibili.com/all?keyword=UI%E8%87%AA%E5%8A%A8%E5%8C%96', timeout=0)
 
     screenshot = page.screenshot()
-
     dom_inspector = DOMInspector(yolo_model=path.join(ProjectPath.root_path, 'bilibili_best.pt'))
-    result = dom_inspector(image=screenshot)
+    result = dom_inspector(image=screenshot, use_ocr=True)
 
     # 点击元素
     result.click(lambda item: item.get('name') == 'channel-link' and '鬼畜' in item.get('text'))

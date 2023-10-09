@@ -3,14 +3,13 @@ import typing
 import numpy as np
 from PIL import Image
 from io import BytesIO
-from paddleocr import PaddleOCR
 from ultralytics import YOLO
 import json
 import cv2
+from utils import ProjectPath
 from utils.dom_result_handler import DOMResultHandler
-from multiprocessing import Pool
-from contextlib import contextmanager
 import os
+from os import path
 
 
 class DOMInspector:
@@ -27,7 +26,7 @@ class DOMInspector:
     DEFAULT_NUM_PROCESSES = math.floor(os.cpu_count() / 2)
     DEFAULT_LANG = 'ch'
 
-    def __init__(self, yolo_model: str):
+    def __init__(self, yolo_model: str, ocr: str = 'paddleocr'):
         """
         初始化DOMInspector类。
 
@@ -35,6 +34,8 @@ class DOMInspector:
             yolo_model (str): YOLO模型的路径。
         """
         self._yolo_model = yolo_model
+        self._ocr = ocr
+
 
     def __call__(self,
                  image: bytes,
@@ -69,6 +70,9 @@ class DOMInspector:
                 result = dom_inspector(image=screenshot, dom_search=lambda item: item.get('name') == 'channel-link' and '鬼畜' in item.get('text'))
                 result.click()
         """
+        ocr_type, ocr_model = None, None
+        if use_ocr:
+            ocr_type, ocr_model = self._get_ocr_model(self._ocr, lang)
         image_array = np.frombuffer(image, dtype=np.uint8)
         image_cv = cv2.imdecode(image_array, flags=cv2.IMREAD_COLOR)
 
@@ -83,33 +87,44 @@ class DOMInspector:
             if not item:
                 continue
             if use_ocr:
-                d = [(item, image_cv, dom_search, lang) for item in item]
-                with self._create_pool() as pool:
-                    dom_list += list(pool.imap_unordered(self._with_ocr, d))
+                dom_list += [self._with_ocr((item, image_cv, dom_search, ocr_type, ocr_model)) for item in item]
             else:
                 dom_list += item
         return DOMResultHandler(dom_list, page_index=page_index)
 
-    @contextmanager
-    def _create_pool(self, num_processes=DEFAULT_NUM_PROCESSES) -> Pool:
-        with Pool(processes=num_processes) as pool:
-            yield pool
-
     def _with_ocr(self, d):
-        dom_detail, image_cv, dom_search, lang = d
+        dom_detail, image_cv, dom_search, ocr_type, ocr_model = d
         box: dict = dom_detail.get('box')
         name = dom_detail.get('name')
         _class = dom_detail.get('class')
         confidence = dom_detail.get('confidence')
         cropped_image = image_cv[int(box.get('y1')): int(box.get('y2')), int(box.get('x1')): int(box.get('x2'))]
         cropped_arr = np.array(cropped_image)
-        ocr = PaddleOCR(use_angle_cls=True, lang=lang, show_log=False)
-        text_result = ocr.ocr(cropped_arr, cls=False)
-        text_result = text_result[0]
-        text_result = [item[1][0] for item in text_result]
+        if ocr_type:
+            text_result = ocr_model.ocr(cropped_arr, cls=False, det=False)
+            text_result = [item[0][0] for item in text_result]
+        else:
+            text_result = ocr_model.readtext(cropped_arr, detail=0)
         result_with_text = {"box": box, "name": name, "class": _class, "confidence": confidence,
                             "text": text_result}
         if isinstance(dom_search, typing.Callable) and dom_search(result_with_text):
             return result_with_text
         elif not dom_search:
             return result_with_text
+
+    def _get_ocr_model(self, ocr: str, lang: str):
+        from easyocr import Reader
+        model_path = path.join(ProjectPath.public_path, 'easyocr_model')
+        if not ocr:
+            raise ValueError(f'不支持传入的ocr参数：{ocr}')
+        if ocr not in ['paddleocr', 'easyocr']:
+            raise ValueError(f'仅支持两种ocr模型，请传入 "paddleocr" 或是 "easyocr" ')
+        if ocr == 'paddleocr':
+            try:
+                from paddleocr import PaddleOCR
+                ocr = PaddleOCR(use_angle_cls=True, lang=lang, show_log=False)
+                return 1, ocr
+            except:
+                print('PP飞桨OCR使用失败，将使用EasyOCR')
+                return 0, Reader(['ch_sim', 'en'], model_storage_directory=model_path, download_enabled=False)
+        return 0, Reader(['ch_sim', 'en'], model_storage_directory=model_path, download_enabled=False)
