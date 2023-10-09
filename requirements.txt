@@ -1,4 +1,3 @@
-paddlepaddle -i https://mirror.baidu.com/pypi/simple
 platformdirs>=2.2.0
 PyYAML==6.0.1
 playwright==1.37.0

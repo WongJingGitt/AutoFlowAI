@@ -50,10 +50,13 @@ conda create -p 虚拟环境保存路径 python=3.10
 **pip依赖包：**
 ```commandline
 pip install -r requirements.txt
+pip install paddlepaddle -i https://mirror.baidu.com/pypi/simple
 ```
 
 > **注意：**  
 > 建议在conda虚拟环境下创建`3.10`版本的`Python`解释器使用，避免依赖包冲突。  
+>   
+> `PaddleOCR`需要安装依赖库`paddlepaddle`，`paddlepaddle`需要在百度源安装。
 > 
 > 若要在高于`3.10`版本下使用，则`PaddleOCR`可能无法安装。框架将使用`EasyOCR`作为OCR识别库，经测试`EasyOCR`中文识别准确度要低于`PaddleOCR`。  
 > 若是无需使用ocr功能，则可以忽略Python版本限制，但还是建议在`3.10`下使用。
