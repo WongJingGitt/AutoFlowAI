@@ -3,6 +3,7 @@ selectors:
   - channel-link
   - channel-items__right
   - center-search-container
+  - search-input-wrap flex_between
   - bili-live-card is-rcmd
   - bili-video-card is-rcmd
   - video-info-container report-wrap-module report-scroll-module
@@ -19,52 +20,19 @@ selectors:
   - '#h-name'
   - avatar-container
 pages:
-  - https://www.bilibili.com/
-  - https://www.bilibili.com/
-  - https://www.bilibili.com/
-  - https://www.bilibili.com/
-  - https://www.bilibili.com/video/BV1LF411o7Gj
-  - https://www.bilibili.com/video/BV1B4411w79q
-  - https://www.bilibili.com/video/BV1884y1f7Cp
-  - https://www.bilibili.com/video/BV1w44y1w7Z9
-  - https://www.bilibili.com/video/BV1Hx4y1X7Y9
-  - https://space.bilibili.com/3066511?spm_id_from=333.1007.tianma.2-2-5.click
-  - https://space.bilibili.com/67992790?spm_id_from=333.1007.0.0
-  - https://www.bilibili.com/
-  - https://space.bilibili.com/398510/?spm_id_from=333.999.0.0
-  - https://www.bilibili.com/video/BV1494y1e7Bf/?spm_id_from=333.999.0.0
-  - https://www.bilibili.com/video/BV1Eo4y177zz/?spm_id_from=333.999.0.0
-  - https://space.bilibili.com/67992790?spm_id_from=333.1007.0.0
-  - https://www.bilibili.com/video/BV1Uc411J7AJ/?spm_id_from=333.999.0.0
-  - https://www.bilibili.com/
-  - https://www.bilibili.com/video/BV1f8411E7np/?spm_id_from=333.999.0.0
-  - https://space.bilibili.com/19348133?spm_id_from=333.1007.tianma.1-3-3.click
-  - https://www.bilibili.com/
-  - https://www.bilibili.com/video/BV1Cv41187pd/?spm_id_from=333.788.recommend_more_video.2&vd_source=5b3322d0857ec7c0db481caf249e5595
-  - https://www.bilibili.com/video/BV1EK4y1v7eN/?spm_id_from=333.788.recommend_more_video.5&vd_source=5b3322d0857ec7c0db481caf249e5595
-  - https://www.bilibili.com/video/BV1ee411W7vx/?spm_id_from=333.788.recommend_more_video.6&vd_source=5b3322d0857ec7c0db481caf249e5595
-  - https://www.bilibili.com/video/BV1WQ4y1C7u1/?spm_id_from=333.788.recommend_more_video.7&vd_source=5b3322d0857ec7c0db481caf249e5595
-  - https://www.bilibili.com/video/BV1af4y1J7WB/?spm_id_from=333.788.recommend_more_video.7&vd_source=5b3322d0857ec7c0db481caf249e5595
-  - https://www.bilibili.com/video/BV1MA411E7ZK/?spm_id_from=333.788.recommend_more_video.6&vd_source=5b3322d0857ec7c0db481caf249e5595
-  - https://www.bilibili.com/video/BV1kt411A7rb/?spm_id_from=333.788.recommend_more_video.4&vd_source=5b3322d0857ec7c0db481caf249e5595
-  - https://www.bilibili.com/video/BV1dr4y1A7Yg/?spm_id_from=333.788.recommend_more_video.13&vd_source=5b3322d0857ec7c0db481caf249e5595
-  - https://www.bilibili.com/video/BV1U34y1a7ia/?spm_id_from=333.788.recommend_more_video.1&vd_source=5b3322d0857ec7c0db481caf249e5595
-  - https://www.bilibili.com/video/BV17Y411j7Ff/?spm_id_from=333.999.0.0&vd_source=5b3322d0857ec7c0db481caf249e5595
-  - https://www.bilibili.com/video/BV19K411G7NW/?spm_id_from=333.999.0.0
-  - https://space.bilibili.com/67992790?spm_id_from=333.1007.0.0
-  - https://www.bilibili.com/video/BV1EY411s7vx/?spm_id_from=333.999.0.0
-  - https://space.bilibili.com/19348133?spm_id_from=333.1007.tianma.1-3-3.click
-  - https://www.bilibili.com/video/BV144411T7Zv/?spm_id_from=333.999.0.0
-  - https://www.bilibili.com/
-  - https://www.bilibili.com/video/BV1Q4411L7bT/?spm_id_from=333.999.0.0
-  - https://www.bilibili.com/video/BV1db41157dA/?spm_id_from=333.999.0.0
-  - https://www.bilibili.com/video/BV1814y1977t/?spm_id_from=333.999.0.0
-  - https://www.bilibili.com/video/BV1fh4y1578w/?spm_id_from=333.999.0.0&vd_source=5b3322d0857ec7c0db481caf249e5595
-  - https://www.bilibili.com/video/BV1U94y1i7ip/?spm_id_from=333.999.0.0
-  - https://www.bilibili.com/video/BV1zW4y1f7dQ/?spm_id_from=333.999.0.0
-  - https://www.bilibili.com/
-  - https://www.bilibili.com/video/BV1eh4y1778d/?spm_id_from=333.999.0.0
-  - https://www.bilibili.com/video/BV1sX4y1L7BV/?spm_id_from=333.1007.tianma.1-1-1.click
-  - https://www.bilibili.com/video/BV1zX4y177bD/?spm_id_from=333.1007.tianma.4-3-13.click&vd_source=5b3322d0857ec7c0db481caf249e5595
-  - https://www.bilibili.com/video/BV1Sm4y1n7sN/?spm_id_from=333.1007.tianma.4-1-11.click
-  - https://www.bilibili.com/video/BV1mu4y1v7bi/?spm_id_from=333.1007.tianma.6-1-17.click
+  - https://search.bilibili.com/all?keyword=UI%E8%87%AA%E5%8A%A8%E5%8C%96&from_source=webtop_search&spm_id_from=333.1007&search_source=5
+  - https://search.bilibili.com/all?keyword=%E6%8E%A5%E5%8F%A3%E8%87%AA%E5%8A%A8%E5%8C%96&from_source=webtop_search&spm_id_from=333.1007&search_source=5
+  - https://search.bilibili.com/all?keyword=WongJingGit&from_source=webtop_search&spm_id_from=333.1007&search_source=5
+  - https://bilibili.com/anime/?spm_id_from=333.337.0.0
+  - https://live.bilibili.com/?spm_id_from=666.4.0.0
+  - https://live.bilibili.com/3158628?hotRank=0&session_id=54974d72c675af67235cc2cae765215e_53ABB365-F6D8-489A-B28F-712E8C387897&launch_id=1000229&live_from=71003
+  - https://www.bilibili.com/video/BV15W4y197Tq/?spm_id_from=333.337.search-card.all.click&vd_source=5b3322d0857ec7c0db481caf249e5595
+  - https://live.bilibili.com/5050?hotRank=0&session_id=61835fa5c9c8787c4bdc690ea365215e_73B66B4F-216F-4B43-9142-26E9014ED8C8&launch_id=1000238&live_from=71004
+  - https://live.bilibili.com/p/eden/area-tags?parentAreaId=14&areaId=0&visit_id=6zvx0bcrxx40
+  - https://live.bilibili.com/30640642?hotRank=0&session_id=61835fa5c9c8787c4bdc690ea365215e_09A25512-4F73-453C-BA08-C14919AB001A&launch_id=1000238&live_from=71004
+  - https://live.bilibili.com/p/eden/area-tags?parentAreaId=3&areaId=35&visit_id=60qxprj6brk0
+  - https://www.bilibili.com/v/kichiku/?spm_id_from=333.1007.0.0
+  - https://www.bilibili.com/v/dance/?spm_id_from=333.1073.0.0
+  - https://search.bilibili.com/all?keyword=%E4%B8%89%E5%85%AB%E5%A4%A7%E7%9B%96&search_source=1
+  - https://www.bilibili.com/video/BV1aV4y1R78b/?spm_id_from=333.337.search-card.all.click&vd_source=5b3322d0857ec7c0db481caf249e5595
+  - https://search.bilibili.com/all?keyword=%E5%90%B4%E4%BA%A6%E5%87%A1%E7%BB%8F%E7%BA%AA%E5%85%AC%E5%8F%B8%E8%A2%AB%E5%BC%BA%E6%89%A7&search_source=1

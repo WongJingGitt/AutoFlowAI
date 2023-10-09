@@ -85,7 +85,7 @@ class LabelGenerator:
             while True:
                 data_name = f"{datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}__{int(random.random() * 10000000)}"
                 yolo_datas = [f'{index} {self._element_position_for_yolo(selector)}' for index, selector in visible]
-
+                print(visible, hidden)
                 # 爬B站首页时出现空yolo_datas陷入死循环的情况，优化这类场景
                 if not yolo_datas:
                     print(url, '搜寻完毕')

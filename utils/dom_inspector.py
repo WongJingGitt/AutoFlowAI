@@ -103,10 +103,10 @@ class DOMInspector:
         confidence = dom_detail.get('confidence')
         cropped_image = image_cv[int(box.get('y1')): int(box.get('y2')), int(box.get('x1')): int(box.get('x2'))]
         cropped_arr = np.array(cropped_image)
-        ocr = PaddleOCR(use_angle_cls=True, lang=lang, show_log=False)
+        ocr = PaddleOCR(use_angle_cls=True, lang=lang, show_log=False, use_gpu=False)
         text_result = ocr.ocr(cropped_arr, cls=False)
-        text_result = text_result[0]
-        text_result = [item[1][0] for item in text_result]
+        text_result = text_result
+        text_result = [item[-1][0] for item in text_result]
         result_with_text = {"box": box, "name": name, "class": _class, "confidence": confidence,
                             "text": text_result}
         if isinstance(dom_search, typing.Callable) and dom_search(result_with_text):
