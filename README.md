@@ -17,9 +17,10 @@ Auto Flow AI是一个创新性的UI自动化框架，将计算机视觉技术与
 <h3 id="quickstart-step1">步骤1：安装依赖</h3>  
 确保你的系统已安装以下依赖： 
   
-- Python 3.10.5+  
+- Python 3.10  
   
-> **注意：** 项目的编写与测试均在Python版本`3.10.5`下进行，在低于`3.10.5`的Python版本上可能存在兼容性问题。建议在`3.10.5`或更高版本的Python中使用。  
+> **注意：**  
+> 项目的编写在Python版本`3.10.5`下进行，经测试在高于`3.10`的版本中，`PaddleOCR`存在兼容性问题，建议在`Python 3.10`中使用。  
 
 <h3 id="quickstart-step2">步骤2：克隆项目</h3>  
 使用以下命令从Gitee克隆项目：  
@@ -40,9 +41,22 @@ cd auto-flow-ai
 <h3 id="quickstart-step3">步骤3：安装项目依赖</h3>  
 运行以下命令安装项目所需的依赖：  
 
+**conda环境：**
+
+```commandline
+conda create -p 虚拟环境保存路径 python=3.10
+```
+
+**pip依赖包：**
 ```commandline
 pip install -r requirements.txt
-```  
+```
+
+> **注意：**  
+> 建议在conda虚拟环境下创建`3.10`版本的`Python`解释器使用，避免依赖包冲突。  
+> 
+> 若要在高于`3.10`版本下使用，则`PaddleOCR`可能无法安装。框架将使用`EasyOCR`作为OCR识别库，经测试`EasyOCR`中文识别准确度要低于`PaddleOCR`。  
+> 若是无需使用ocr功能，则可以忽略Python版本限制，但还是建议在`3.10`下使用。
 
 <h3 id="quickstart-step4">步骤4：填写数据收集配置文件</h3>  
 
@@ -56,7 +70,7 @@ pip install -r requirements.txt
         - btn
         - input
     ```
-  - **列表形式：**  写入包含 `class` 和 `name` 两个键的字典，其中 `class` 代表组件的选择器，`name` 则是组件的名称。后续识别结果中的 `name` 将使用此名称。 **注意：`name`不可以使用中文！**  
+  - **字典形式：**  写入包含 `class` 和 `name` 两个键的字典，其中 `class` 代表组件的选择器，`name` 则是组件的名称。后续识别结果中的 `name` 将使用此名称。 **<font style="color: orange">注意：`name`不可以使用中文！</font>**  
     ```yaml
     selectors:
         - class:
@@ -131,7 +145,8 @@ pip install -r requirements.txt
     - https://www.bilibili.com/video/BV1Hx4y1X7Y9
     ```
 
-> **注意：** 由于篇幅原因只写了部分配置数据，实际使用中请务必在pages中覆盖大量不同的场景。
+> **注意：**   
+> 由于篇幅原因只写了部分配置数据，实际使用中请务必在pages中覆盖大量不同的场景。
 
 <h3 id="quickstart-step5">步骤5：收集训练数据</h3>  
 
@@ -248,7 +263,8 @@ if __name__ == '__main__':
 ```
 
 
-> **注意：** `BrowserLauncher` 是一个基于 `Playwright` 封装的浏览器启动类，具体的API可以查阅[官方文档](https://playwright.dev/python/docs/api/class-playwright)  
+> **注意：**   
+> `BrowserLauncher` 是一个基于 `Playwright` 封装的浏览器启动类，具体的API可以查阅[官方文档](https://playwright.dev/python/docs/api/class-playwright)  
 >
 > 
 > 对于 `Selenium` 的支持，可能会在后期安排。
